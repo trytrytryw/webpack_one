@@ -1,4 +1,4 @@
-import './style.css';
+import './assets/css/style.css';
 // 测试git命令 创建分支--------
 
 function component() {
