@@ -13,7 +13,9 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: 'webpack_one'
+      title: 'webpack',
+      filename: 'index.html',
+      template:  path.resolve(__dirname, 'src/index.html')
     })
   ],
   module: {
@@ -22,13 +24,41 @@ module.exports = {
         test: /\.css$/,
         use: [
           'style-loader',
-          'css-loader'
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              config: {
+                path: './config/postcss.config.js'
+              }
+            }
+          }
         ]
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
         use: [
-          'file-loader'
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+              name: '[name].[ext]',
+              outputPath: 'images/'
+            }
+          }
+          
+        ]
+      },
+      {
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'audio/'
+            }
+          }
         ]
       },
       {
@@ -36,6 +66,14 @@ module.exports = {
         use: [
           'file-loader'
         ]
+      },
+      {
+        test: /\.html$/,
+        loader: 'html-loader',
+        options: {
+          minimize: true,
+          attrs: ['img:src', 'img:data-src', 'audio:src']
+        }
       }
     ]
   }
